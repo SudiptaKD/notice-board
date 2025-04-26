@@ -26,13 +26,11 @@ export default function Notices() {
         {notices.map((notice, index) => (
           <div key={index} className="border p-4 rounded-lg shadow-lg">
             {notice.fileType === "application/pdf" ? (
-              <Link href={notice.filePath} passHref>
-                <a target="_blank">
+              <Link href={notice.filePath} passHref target="_blank">
                   <p className="text-xl">{notice.name}</p>
                   <p>{notice.description}</p>
                   <p>{notice.timestamp}</p>
                   <p className="text-blue-600">View PDF</p>
-                </a>
               </Link>
             ) : (
               <div>
@@ -55,12 +53,11 @@ export default function Notices() {
         <ul className="space-y-4">
           {notices.map((notice, index) => (
             <li key={index} className="border p-4 rounded-lg shadow-lg">
-              <Link href={notice.filePath} passHref>
-                <a target="_blank" className="text-blue-600">
+              <Link href={notice?.filePath || ""} passHref>
                   <h3 className="font-semibold">{notice.name}</h3>
                   <p>{notice.description}</p>
                   <p>{notice.timestamp}</p>
-                </a>
+                
               </Link>
             </li>
           ))}

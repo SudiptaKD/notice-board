@@ -1,28 +1,38 @@
-import { createRouter } from "next-connect";  // Import createRouter instead of nextConnect
-import multer from "multer";
+import { NextRequest, NextResponse } from "next/server";
+import path from "path";
+import fs from "fs";
 import Notice from "@/models/Notice";
 
-const storage = multer.diskStorage({
-  destination: "./public/uploads",
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
+const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
 
-const upload = multer({ storage });
+export const POST = async (req) => {
+  const formData = await req.formData();
+  const body = Object.fromEntries(formData);
+  const file = (body.file) || null;
 
-const router = createRouter();  // Use createRouter instead of nextConnect
+  if (file) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR);
+    }
 
-// Handle POST requests for file upload
-router.use(upload.single("file"));
+    fs.writeFileSync(
+      path.resolve(UPLOAD_DIR, (body).file.name),
+      buffer
+    );
+  } else {
+    return NextResponse.json({
+      success: false,
+    });
+  }
 
-router.post(async (req, res) => {
-  const { name, description } = req.body;
-  const filePath = `/uploads/${req.file.filename}`;
-  const fileType = req.file.mimetype;
+
+  const { name, description } = body; 
+  const filePath = `/uploads/${body.file.name}`;  // Path to the uploaded file
+  const fileType = body.file.type;  // MIME type of the uploaded file
 
   try {
-    // Create new notice and save to MongoDB
+    // Create a new notice in MongoDB
     const notice = new Notice({
       name,
       description,
@@ -31,11 +41,11 @@ router.post(async (req, res) => {
       timestamp: new Date(),
     });
 
+    // Save to MongoDB
     await notice.save();
-    res.status(200).json({ message: "File uploaded successfully", notice });
+    return NextResponse.json({ message: "File uploaded successfully", notice });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Error saving to MongoDB:", err);
+    return NextResponse.json({ message: err.message }, { status: 500 });
   }
-});
-
-export { router as POST };  // Export the router's POST handler
+}
