@@ -1,7 +1,6 @@
-import nextConnect from "next-connect";
+import { createRouter } from "next-connect";  // Import createRouter instead of nextConnect
 import multer from "multer";
-import mongoose from "mongoose";
-import Notice from "../../models/Notice";  // Mongoose model for notices
+import Notice from "@/models/Notice";
 
 const storage = multer.diskStorage({
   destination: "./public/uploads",
@@ -12,11 +11,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-const handler = nextConnect();
+const router = createRouter();  // Use createRouter instead of nextConnect
 
-handler.use(upload.single("file"));
+// Handle POST requests for file upload
+router.use(upload.single("file"));
 
-handler.post(async (req, res) => {
+router.post(async (req, res) => {
   const { name, description } = req.body;
   const filePath = `/uploads/${req.file.filename}`;
   const fileType = req.file.mimetype;
@@ -38,4 +38,4 @@ handler.post(async (req, res) => {
   }
 });
 
-export default handler;
+export { router as POST };  // Export the router's POST handler
