@@ -2,8 +2,7 @@
 import { formatTimestamp } from '@/utils/utils';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
-import { Document, Page } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
+
 
 const HomePageUI = () => {
   const [notices, setNotices] = useState([]);
@@ -21,10 +20,10 @@ const HomePageUI = () => {
     fetchNotices(currentPage);
   }, [currentPage]);
   return (
-    <div className="min-h-screen grid grid-rows-[20vh_1fr] grid-cols-1 bg-white">
+    <div className="min-h-screen grid grid-rows-[15vh_1fr] grid-cols-1 bg-white">
       {/* Top Section */}
       <section className="w-full border-b-4 border-gray-700 flex-col justify-center items-center">
-        <header className="h-[15vh] w-full bg-white  border-gray-700 flex  items-center justify-between px-6">
+        <header className="h-full w-full bg-white  border-gray-700 flex  items-center justify-between px-6">
           {/* Left: University Logo */}
           <div className="flex items-center space-x-4">
             <img
@@ -36,23 +35,30 @@ const HomePageUI = () => {
           {/* <div className="text-4xl font-semibold text-green-500">
               Green University
             </div> */}
-
-        </header>
-        <div className=" px-6 text-xl font-semibold text-green-900">
+                    <div className=" px-6 text-3xl font-semibold text-green-900">
           Dept. of Computer Science and Engineering
         </div>
+
+        </header>
+
       </section>
 
       {/* Bottom Section with 2/3 and 1/3 layout */}
       <section className="grid grid-cols-3 gap-4 w-full border-b-4 border-gray-700">
         {/* Left Section - 2/3 width */}
         <div className="col-span-2 p-4 border-r-4 border-gray-700">
-          <div className="h-full flex justify-center items-center">
+          <div className="w-full h-full flex justify-center items-center">
           {notices[0]?.fileType === 'application/pdf' ? (
-        <div className="h-full">
-         <Document file={notices[0]?.filePath}>
-            <Page pageNumber={1} />
-          </Document>
+        <div className="w-full h-full">
+              <object
+      data={notices[0]?.filePath}
+      type="application/pdf"
+      width="100%"
+      height="100%"
+    >
+      <p>Your browser does not support PDFs. <a href="path_to_your_pdf.pdf">Download the PDF</a>.</p>
+    </object>
+    
 
         </div>
       ) : (
@@ -69,7 +75,7 @@ const HomePageUI = () => {
 
         {/* Right Section - 1/3 width */}
         <div className="col-span-1 p-2">
-      <h2 className="text-xl font-semibold text-gray-800 mb-6">Notice List</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Notice List</h2>
 
       <div className="space-y-2  h-[500px] overflow-y-auto">
         {notices.map((notice, index) => (
@@ -78,8 +84,8 @@ const HomePageUI = () => {
             className="bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
             <Link href={notice?.filePath || ""} passHref className='block p-6' target='_blank'>
-                <h3 className="text-xl font-semibold text-gray-900">{notice.name}</h3>
-                <p className="text-gray-600 mt-2">{notice.description}</p>
+                <h3 className="text-lg font-medium text-gray-900">{notice.name}</h3>
+                {/* <p className="text-gray-600 mt-2">{notice.description}</p> */}
                 <p className="text-sm text-gray-500 mt-4">{formatTimestamp(notice.timestamp)}</p>
             </Link>
           </div>
