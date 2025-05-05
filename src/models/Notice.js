@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const NoticeSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
     filePath: { type: String, required: true },
     timestamp: { type: Date, default: Date.now },
     fileType: { type: String, required: true },
