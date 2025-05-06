@@ -37,12 +37,36 @@ const HomePageUI = () => {
               className="h-20"
             />
           </div>
+         
           {/* <div className="text-4xl font-semibold text-green-500">
               Green University
             </div> */}
-          <div className=" px-6 text-3xl font-semibold text-green-900">
+          <div className=" px-6 text-4xl font-semibold text-green-900">
             Dept. of Computer Science and Engineering
           </div>
+          {/* <div className='flex justify-center gap-2 min-w-[700px]'>
+            <div className="flex items-center space-x-4">
+              <img
+                src="/gub-image-1.jpg"
+                alt="Green University Logo"
+                className="h-28 w-full"
+              />
+            </div>
+            <div className="flex items-center space-x-4">
+              <img
+                src="/gub-image-2.jpg"
+                alt="Green University Logo"
+                className="h-28 w-full"
+              />
+            </div>
+            <div className="flex items-center space-x-4">
+              <img
+                src="/gub-image-3.jpg"
+                alt="Green University Logo"
+                className="h-28 w-full"
+              />
+            </div>
+          </div> */}
 
         </header>
 
